@@ -26,7 +26,6 @@ spec:
               key: DATABASE_URL
         - name: REDIS_URL
           value: "redis://redis:6379"
-        # Health checks
         livenessProbe:
           httpGet:
             path: /health
