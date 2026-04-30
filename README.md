@@ -1,37 +1,32 @@
-## ШАГ1
-``cd Lab3``
+IPR_6 - ЛАБОРАТОРНАЯ РАБОТА 6
 
-### Сборка backend
-``cd backend``
-``docker build -t todo-backend:latest .``
+СТРУКТУРА:
+- backend/ - код из ЛР5
+- frontend/ - код из ЛР5
+- infrastructure/ - PostgreSQL + Redis (отдельно)
+- app/ - только приложение (Kustomize + Helm)
 
-# Сборка frontend  
-``cd ../frontend``
-``docker build -t todo-frontend:latest .``
+КОНТРАКТ С БД:
+Хост: postgres-headless.todo-dev.svc.cluster.local
+Порт: 5432
+БД: todoapp
+Пользователь: todo_user
+Пароль: todo_pass
 
-``cd ..``
-## Шаг 2: Применение манифестов
-```
-kubectl apply -f k8s/namespace.yaml
-kubectl apply -f k8s/configmap.yaml
-kubectl apply -f k8s/secrets.yaml
-kubectl apply -f k8s/postgres.yaml
-kubectl apply -f k8s/redis.yaml
-kubectl apply -f k8s/backend.yaml
-kubectl apply -f k8s/frontend.yaml
-```
+DATABASE_URL:
+postgresql://todo_user:todo_pass@postgres-headless.todo-dev.svc.cluster.local:5432/todoapp
 
-## 3
+ДЕПЛОЙ:
+1. kubectl apply -k infrastructure/postgres/kustomize/overlays/dev
+2. kubectl apply -k infrastructure/redis/kustomize/base
+3. kubectl apply -k app/kustomize/overlays/dev
 
-### Проверка всех ресурсов
-```kubectl get all -n todo-app```
+ИЛИ ЧЕРЕЗ HELM:
+helm install todo-app ./app/helm/todo-app -f ./app/helm/todo-app/values/dev.yaml --namespace todo-dev --create-namespace
 
-### Проверка подов
-``kubectl get pods -n todo-app -w``
+ПРОВЕРКА:
+kubectl get pods -n todo-dev
+kubectl port-forward -n todo-dev service/frontend 8080:80
 
-### Проверка логов
-``kubectl logs -n todo-app -l app=backend``
-
-### Доступ к приложению
-``kubectl port-forward -n todo-app service/frontend-service 8080:80``
-# Открыть: http://localhost:8080
+HEALTH CHECKS:
+kubectl exec -n todo-dev deployment/backend -- curl -s http://localhost:5000/health
