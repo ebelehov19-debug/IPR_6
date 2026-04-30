@@ -23,60 +23,60 @@ IPR_6/
 │   └── src/
 │       └── App.js
 │
-├── infrastructure/                  # ИНФРАСТРУКТУРА (ОТДЕЛЬНО ОТ ПРИЛОЖЕНИЯ)
+├── infrastructure/                 
 │   │
-│   ├── postgres/                    # POSTGRESQL
+│   ├── postgres/            
 │   │   └── kustomize/
-│   │       ├── base/                # БАЗОВЫЕ МАНИФЕСТЫ
-│   │       │   ├── statefulset.yaml      # STATEFULSET С PVC
-│   │       │   ├── headless-service.yaml # HEADLESS SERVICE (clusterIP: None)
-│   │       │   ├── configmap.yaml        # КОНФИГ БД
-│   │       │   ├── secret.yaml           # ПАРОЛИ
+│   │       ├── base/              
+│   │       │   ├── statefulset.yaml      
+│   │       │   ├── headless-service.yaml 
+│   │       │   ├── configmap.yaml        
+│   │       │   ├── secret.yaml          
 │   │       │   └── kustomization.yaml
 │   │       │
-│   │       └── overlays/            # ОКРУЖЕНИЯ
+│   │       └── overlays/            
 │   │           ├── dev/
 │   │           │   └── kustomization.yaml
 │   │           └── prod/
 │   │               └── kustomization.yaml
 │   │
-│   └── redis/                       # REDIS
+│   └── redis/                      
 │       └── kustomize/
 │           └── base/
 │               ├── deployment.yaml
 │               ├── service.yaml
 │               └── kustomization.yaml
 │
-├── app/                             # ПРИЛОЖЕНИЕ (БЕЗ БД)
+├── app/                            
 │   │
-│   ├── kustomize/                   # KUSTOMIZE ВАРИАНТ
-│   │   ├── base/                    # БАЗОВЫЕ МАНИФЕСТЫ
-│   │   │   ├── backend-deployment.yaml   # С HEALTH CHECKS
+│   ├── kustomize/              
+│   │   ├── base/                   
+│   │   │   ├── backend-deployment.yaml 
 │   │   │   ├── backend-service.yaml
-│   │   │   ├── frontend-deployment.yaml  # С HEALTH CHECKS
+│   │   │   ├── frontend-deployment.yaml 
 │   │   │   ├── frontend-service.yaml
 │   │   │   └── kustomization.yaml
 │   │   │
-│   │   └── overlays/                # ОКРУЖЕНИЯ (DATABASE_URL ЗДЕСЬ)
+│   │   └── overlays/               
 │   │       ├── dev/
-│   │       │   └── kustomization.yaml   # DATABASE_URL ДЛЯ DEV
+│   │       │   └── kustomization.yaml   
 │   │       └── prod/
-│   │           └── kustomization.yaml   # DATABASE_URL ДЛЯ PROD
+│   │           └── kustomization.yaml   
 │   │
 │   └── helm/                        # HELM ВАРИАНТ
 │       └── todo-app/
 │           ├── Chart.yaml
 │           ├── values.yaml
 │           ├── values/
-│           │   ├── dev.yaml             # DATABASE_URL ДЛЯ DEV
-│           │   └── prod.yaml            # DATABASE_URL ДЛЯ PROD
+│           │   ├── dev.yaml           
+│           │   └── prod.yaml            
 │           └── templates/
 │               ├── _helpers.tpl
 │               ├── namespace.yaml
-│               ├── backend.yaml         # С HEALTH CHECKS
-│               └── frontend.yaml        # С HEALTH CHECKS
+│               ├── backend.yaml        
+│               └── frontend.yaml       
 │
-├── README.md                        # КОНТРАКТ С БД + ИНСТРУКЦИИ
+├── README.md                        
 ├── DEPLOY.md                        # ПОРЯДОК ДЕПЛОЯ
 └── QUICKSTART.md                    # БЫСТРЫЙ СТАРТ
 ```
