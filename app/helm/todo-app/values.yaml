@@ -1,0 +1,18 @@
+namespace: default
+backend:
+  replicas: 1
+  image: todo-backend:latest
+  port: 5000
+frontend:
+  replicas: 1
+  image: todo-frontend:latest
+  port: 80
+database:
+  host: postgres-headless
+  port: 5432
+  name: todoapp
+  user: todo_user
+  password: todo_pass
+redis:
+  host: redis
+  port: 6379

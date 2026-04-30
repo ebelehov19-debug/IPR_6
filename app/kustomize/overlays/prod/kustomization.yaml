@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: todo-prod
+resources:
+- ../../base
+secretGenerator:
+- name: app-secret
+  literals:
+  - DATABASE_URL=postgresql://todo_user:todo_pass@postgres-headless.todo-dev.svc.cluster.local:5432/todoapp
+patches:
+- target:
+    kind: Deployment
+    name: backend
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 3
+- target:
+    kind: Deployment
+    name: frontend
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 2
