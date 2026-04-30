@@ -5,7 +5,81 @@
 - frontend/ - код из ЛР5
 - infrastructure/ - PostgreSQL + Redis (отдельно)
 - app/ - только приложение (Kustomize + Helm)
-
+```
+IPR_6/
+│
+├── backend/                         # КОД BACKEND ИЗ ЛР5
+│   ├── Dockerfile
+│   ├── package-lock.json
+│   └── src/
+│       └── server.js
+│
+├── frontend/                        # КОД FRONTEND ИЗ ЛР5
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   ├── package-lock.json
+│   ├── public/
+│   │   └── index.html
+│   └── src/
+│       └── App.js
+│
+├── infrastructure/                  # ИНФРАСТРУКТУРА (ОТДЕЛЬНО ОТ ПРИЛОЖЕНИЯ)
+│   │
+│   ├── postgres/                    # POSTGRESQL
+│   │   └── kustomize/
+│   │       ├── base/                # БАЗОВЫЕ МАНИФЕСТЫ
+│   │       │   ├── statefulset.yaml      # STATEFULSET С PVC
+│   │       │   ├── headless-service.yaml # HEADLESS SERVICE (clusterIP: None)
+│   │       │   ├── configmap.yaml        # КОНФИГ БД
+│   │       │   ├── secret.yaml           # ПАРОЛИ
+│   │       │   └── kustomization.yaml
+│   │       │
+│   │       └── overlays/            # ОКРУЖЕНИЯ
+│   │           ├── dev/
+│   │           │   └── kustomization.yaml
+│   │           └── prod/
+│   │               └── kustomization.yaml
+│   │
+│   └── redis/                       # REDIS
+│       └── kustomize/
+│           └── base/
+│               ├── deployment.yaml
+│               ├── service.yaml
+│               └── kustomization.yaml
+│
+├── app/                             # ПРИЛОЖЕНИЕ (БЕЗ БД)
+│   │
+│   ├── kustomize/                   # KUSTOMIZE ВАРИАНТ
+│   │   ├── base/                    # БАЗОВЫЕ МАНИФЕСТЫ
+│   │   │   ├── backend-deployment.yaml   # С HEALTH CHECKS
+│   │   │   ├── backend-service.yaml
+│   │   │   ├── frontend-deployment.yaml  # С HEALTH CHECKS
+│   │   │   ├── frontend-service.yaml
+│   │   │   └── kustomization.yaml
+│   │   │
+│   │   └── overlays/                # ОКРУЖЕНИЯ (DATABASE_URL ЗДЕСЬ)
+│   │       ├── dev/
+│   │       │   └── kustomization.yaml   # DATABASE_URL ДЛЯ DEV
+│   │       └── prod/
+│   │           └── kustomization.yaml   # DATABASE_URL ДЛЯ PROD
+│   │
+│   └── helm/                        # HELM ВАРИАНТ
+│       └── todo-app/
+│           ├── Chart.yaml
+│           ├── values.yaml
+│           ├── values/
+│           │   ├── dev.yaml             # DATABASE_URL ДЛЯ DEV
+│           │   └── prod.yaml            # DATABASE_URL ДЛЯ PROD
+│           └── templates/
+│               ├── _helpers.tpl
+│               ├── namespace.yaml
+│               ├── backend.yaml         # С HEALTH CHECKS
+│               └── frontend.yaml        # С HEALTH CHECKS
+│
+├── README.md                        # КОНТРАКТ С БД + ИНСТРУКЦИИ
+├── DEPLOY.md                        # ПОРЯДОК ДЕПЛОЯ
+└── QUICKSTART.md                    # БЫСТРЫЙ СТАРТ
+```
 ### КОНТРАКТ С БД:
 Хост: postgres-headless.todo-dev.svc.cluster.local
 Порт: 5432
